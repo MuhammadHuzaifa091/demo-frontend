@@ -33,7 +33,7 @@ export const useAuthStore = defineStore('auth', () => {
       formData.append('username', email)
       formData.append('password', password)
 
-      const response = await api.post('/api/v1/auth/login', formData, {
+      const response = await api.post('/auth/login', formData, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -44,7 +44,7 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.setItem('token', access_token)
 
       // Get user info
-      const userResponse = await api.get('/api/v1/users/me')
+      const userResponse = await api.get('/users/me')
       user.value = userResponse.data
       localStorage.setItem('user', JSON.stringify(userResponse.data))
 
@@ -59,7 +59,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const register = async (registrationData) => {
     try {
-      const response = await api.post('/api/v1/auth/register-with-role', registrationData)
+      const response = await api.post('/auth/register-with-role', registrationData)
       return { success: true, data: response.data }
     } catch (error) {
       return { 
@@ -99,7 +99,7 @@ export const useAuthStore = defineStore('auth', () => {
   const initializeAuth = async () => {
     if (token.value) {
       try {
-        const userResponse = await api.get('/api/v1/users/me')
+        const userResponse = await api.get('/users/me')
         user.value = userResponse.data
         localStorage.setItem('user', JSON.stringify(userResponse.data))
       } catch (error) {

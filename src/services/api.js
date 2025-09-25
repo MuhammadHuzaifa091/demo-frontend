@@ -1,6 +1,6 @@
 import api from './axios'
 
-const API_BASE = '/api/v1'
+const API_BASE = '' // Empty since axios baseURL already includes /api/v1
 
 // Repair Requests API
 export const repairRequestsAPI = {
