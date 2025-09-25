@@ -1,33 +1,32 @@
-import axios from 'axios'
-
-const API_BASE = '/api/v1'
+// src/api/index.js
+import api from './axios';
 
 // Repair Requests API
 export const repairRequestsAPI = {
-  getAll: () => axios.get(`${API_BASE}/repair-requests/`), // Providers only
-  getMyRequests: () => axios.get(`${API_BASE}/repair-requests/my-requests`), // Users only
-  getById: (id) => axios.get(`${API_BASE}/repair-requests/${id}`),
-  create: (data) => axios.post(`${API_BASE}/repair-requests/`, data),
-  update: (id, data) => axios.put(`${API_BASE}/repair-requests/${id}`, data),
-  delete: (id) => axios.delete(`${API_BASE}/repair-requests/${id}`)
-}
+  getAll: () => api.get('/repair-requests/'),
+  getMyRequests: () => api.get('/repair-requests/my-requests'),
+  getById: (id) => api.get(`/repair-requests/${id}`),
+  create: (data) => api.post('/repair-requests/', data),
+  update: (id, data) => api.put(`/repair-requests/${id}`, data),
+  delete: (id) => api.delete(`/repair-requests/${id}`)
+};
 
 // Service Providers API
 export const serviceProvidersAPI = {
-  getAll: () => axios.get(`${API_BASE}/providers/`), // Users only - for browsing
-  getMyProviders: () => axios.get(`${API_BASE}/providers/my/providers`), // Providers only
-  getById: (id) => axios.get(`${API_BASE}/providers/${id}`),
-  create: (data) => axios.post(`${API_BASE}/providers/`, data),
-  update: (id, data) => axios.put(`${API_BASE}/providers/${id}`, data),
-  delete: (id) => axios.delete(`${API_BASE}/providers/${id}`)
-}
+  getAll: () => api.get('/providers/'),
+  getMyProviders: () => api.get('/providers/my/providers'),
+  getById: (id) => api.get(`/providers/${id}`),
+  create: (data) => api.post('/providers/', data),
+  update: (id, data) => api.put(`/providers/${id}`, data),
+  delete: (id) => api.delete(`/providers/${id}`)
+};
 
 // Services API
 export const servicesAPI = {
-  getAll: () => axios.get(`${API_BASE}/services/`), // Users only
-  getById: (id) => axios.get(`${API_BASE}/services/${id}`), // Users only
-  create: (data) => axios.post(`${API_BASE}/services/`, data), // Providers only
-  update: (id, data) => axios.put(`${API_BASE}/services/${id}`, data), // Providers only
-  delete: (id) => axios.delete(`${API_BASE}/services/${id}`), // Providers only
-  getMyServices: () => axios.get(`${API_BASE}/services/my/services`) // Providers only
-}
+  getAll: () => api.get('/services/'),
+  getById: (id) => api.get(`/services/${id}`),
+  create: (data) => api.post('/services/', data),
+  update: (id, data) => api.put(`/services/${id}`, data),
+  delete: (id) => api.delete(`/services/${id}`),
+  getMyServices: () => api.get('/services/my/services')
+};
