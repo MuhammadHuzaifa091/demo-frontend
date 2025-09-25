@@ -7,7 +7,19 @@ export const repairRequestsAPI = {
   getAll: () => api.get(`${API_BASE}/repair-requests/`), // Providers only
   getMyRequests: () => api.get(`${API_BASE}/repair-requests/my-requests`), // Users only
   getById: (id) => api.get(`${API_BASE}/repair-requests/${id}`),
-  create: (data) => api.post(`${API_BASE}/repair-requests/`, data),
+  create: (data) => {
+    // Convert data to FormData for the backend
+    const formData = new FormData();
+    formData.append('title', data.title);
+    if (data.description) {
+      formData.append('description', data.description);
+    }
+    return api.post(`${API_BASE}/repair-requests/`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+  },
   update: (id, data) => api.put(`${API_BASE}/repair-requests/${id}`, data),
   delete: (id) => api.delete(`${API_BASE}/repair-requests/${id}`)
 }

@@ -121,12 +121,15 @@ const handleRegister = async () => {
   }
   
   try {
-    const result = await authStore.register(
-      form.value.email,
-      form.value.password,
-      form.value.firstName,
-      form.value.lastName
-    )
+    const registrationData = {
+      email: form.value.email,
+      password: form.value.password,
+      first_name: form.value.firstName,
+      last_name: form.value.lastName,
+      role: 'user' // Default role for basic registration
+    }
+    
+    const result = await authStore.register(registrationData)
     
     if (result.success) {
       success.value = 'Account created successfully! Please sign in.'
