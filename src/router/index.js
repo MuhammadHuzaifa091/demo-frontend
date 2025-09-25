@@ -8,6 +8,7 @@ import RepairRequests from '../views/RepairRequests.vue'
 import ServiceProviders from '../views/ServiceProviders.vue'
 import UserDashboard from '../views/UserDashboard.vue'
 import ProviderDashboard from '../views/ProviderDashboard.vue'
+import AdminDashboard from '../views/AdminDashboard.vue'
 import Services from '../views/Services.vue'
 
 const routes = [
@@ -59,6 +60,12 @@ const routes = [
     meta: { requiresAuth: true, roles: ['provider_individual', 'provider_organization'] }
   },
   {
+    path: '/admin-dashboard',
+    name: 'AdminDashboard',
+    component: AdminDashboard,
+    meta: { requiresAuth: true, roles: ['admin'] }
+  },
+  {
     path: '/services',
     name: 'Services',
     component: Services,
@@ -83,6 +90,8 @@ router.beforeEach((to, from, next) => {
       next('/dashboard')
     } else if (userRole?.startsWith('provider_')) {
       next('/provider-dashboard')
+    } else if (userRole === 'admin') {
+      next('/admin-dashboard')
     } else {
       next('/')
     }
@@ -92,6 +101,8 @@ router.beforeEach((to, from, next) => {
       next('/dashboard')
     } else if (userRole?.startsWith('provider_')) {
       next('/provider-dashboard')
+    } else if (userRole === 'admin') {
+      next('/admin-dashboard')
     } else {
       next('/')
     }

@@ -358,7 +358,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useAuthStore } from '../stores/auth'
-import { serviceProvidersAPI, repairRequestsAPI } from '../services/api'
+import { serviceProvidersAPI, repairRequestsAPI, servicesAPI } from '../services/api'
 
 const authStore = useAuthStore()
 
@@ -387,8 +387,8 @@ const getProviderName = () => {
 
 const fetchMyServices = async () => {
   try {
-    const response = await serviceProvidersAPI.getMyProviders()
-    // Get user's own service provider listings
+    const response = await servicesAPI.getMyServices()
+    // Get user's own service listings
     myServices.value = response.data
   } catch (err) {
     console.error('Failed to fetch services:', err)
@@ -419,7 +419,7 @@ const createService = async () => {
   error.value = ''
   
   try {
-    await serviceProvidersAPI.create(newService.value)
+    await servicesAPI.create(newService.value)
     showCreateService.value = false
     newService.value = { name: '', service_type: '', description: '', contact_info: '' }
     await fetchMyServices()

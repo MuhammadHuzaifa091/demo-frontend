@@ -56,7 +56,7 @@
             <div v-if="currentStep === 1" class="animate-fade-in">
               <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Choose Your Role</h2>
               
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div 
                   @click="selectRole('user')"
                   class="role-card cursor-pointer p-6 border-2 rounded-xl transition-all duration-300 hover:shadow-lg"
@@ -84,6 +84,21 @@
                     <div class="text-4xl mb-4">🔧</div>
                     <h3 class="text-xl font-semibold text-gray-900 mb-2">Service Provider</h3>
                     <p class="text-gray-600">I offer repair and maintenance services</p>
+                  </div>
+                </div>
+
+                <div 
+                  @click="selectRole('admin')"
+                  class="role-card cursor-pointer p-6 border-2 rounded-xl transition-all duration-300 hover:shadow-lg"
+                  :class="{
+                    'border-purple-500 bg-purple-50': formData.role === 'admin',
+                    'border-gray-200 hover:border-purple-300': formData.role !== 'admin'
+                  }"
+                >
+                  <div class="text-center">
+                    <div class="text-4xl mb-4">👑</div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Administrator</h3>
+                    <p class="text-gray-600">I manage and oversee the platform</p>
                   </div>
                 </div>
               </div>
@@ -199,6 +214,22 @@
                 <div class="text-6xl mb-4">🎉</div>
                 <h3 class="text-xl font-semibold text-gray-900 mb-2">Almost Done!</h3>
                 <p class="text-gray-600">Click "Complete Registration" to finish setting up your account.</p>
+              </div>
+
+              <!-- Admin - No additional fields -->
+              <div v-if="formData.role === 'admin'" class="text-center py-8">
+                <div class="text-6xl mb-4">👑</div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Administrator Access Ready!</h3>
+                <p class="text-gray-600">You'll have full access to manage the platform and view analytics.</p>
+                <div class="mt-6 p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg border border-pink-200">
+                  <h4 class="font-semibold text-purple-800 mb-2">Admin Privileges Include:</h4>
+                  <ul class="text-sm text-purple-700 space-y-1">
+                    <li>• User management and role assignment</li>
+                    <li>• System analytics and reporting</li>
+                    <li>• Service and request oversight</li>
+                    <li>• Platform configuration</li>
+                  </ul>
+                </div>
               </div>
               
               <!-- Individual Provider -->
@@ -387,6 +418,7 @@ const canProceed = computed(() => {
   switch (currentStep.value) {
     case 1:
       if (formData.value.role === 'user') return true
+      if (formData.value.role === 'admin') return true
       if (formData.value.role === 'provider') return !!formData.value.providerType
       return false
     case 2:
@@ -398,6 +430,7 @@ const canProceed = computed(() => {
              formData.value.password === formData.value.confirmPassword
     case 3:
       if (formData.value.role === 'user') return true
+      if (formData.value.role === 'admin') return true
       if (formData.value.role === 'provider' && formData.value.providerType === 'individual') {
         return formData.value.service_type && formData.value.experience && formData.value.contact_info
       }
@@ -413,7 +446,7 @@ const canProceed = computed(() => {
 
 const selectRole = (role) => {
   formData.value.role = role
-  if (role === 'user') {
+  if (role === 'user' || role === 'admin') {
     formData.value.providerType = ''
   }
 }
@@ -435,6 +468,8 @@ const previousStep = () => {
 const getRoleSpecificTitle = () => {
   if (formData.value.role === 'user') {
     return 'Ready to Go!'
+  } else if (formData.value.role === 'admin') {
+    return 'Administrator Setup Complete!'
   } else if (formData.value.providerType === 'individual') {
     return 'Tell Us About Your Services'
   } else if (formData.value.providerType === 'organization') {
@@ -457,6 +492,7 @@ const handleSubmit = async () => {
       first_name: formData.value.first_name,
       last_name: formData.value.last_name,
       role: formData.value.role === 'user' ? 'user' : 
+            formData.value.role === 'admin' ? 'admin' :
             formData.value.providerType === 'individual' ? 'provider_individual' : 'provider_organization'
     }
     
