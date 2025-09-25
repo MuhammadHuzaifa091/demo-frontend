@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import axios from 'axios'
+import api from '../services/axios'
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref(localStorage.getItem('token') || null)
@@ -8,8 +8,8 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAuthenticated = computed(() => !!token.value)
 
-  // Set up axios interceptor for authentication
-  axios.interceptors.request.use((config) => {
+  // Set up api interceptor for authentication
+  api.interceptors.request.use((config) => {
     if (token.value) {
       config.headers.Authorization = `Bearer ${token.value}`
     }
@@ -17,7 +17,7 @@ export const useAuthStore = defineStore('auth', () => {
   })
 
   // Handle token expiration
-  axios.interceptors.response.use(
+  api.interceptors.response.use(
     (response) => response,
     (error) => {
       if (error.response?.status === 401) {
@@ -33,7 +33,7 @@ export const useAuthStore = defineStore('auth', () => {
       formData.append('username', email)
       formData.append('password', password)
 
-      const response = await axios.post('/api/v1/auth/login', formData, {
+      const response = await api.post('/api/v1/auth/login', formData, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -44,7 +44,7 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.setItem('token', access_token)
 
       // Get user info
-      const userResponse = await axios.get('/api/v1/users/me')
+      const userResponse = await api.get('/api/v1/users/me')
       user.value = userResponse.data
       localStorage.setItem('user', JSON.stringify(userResponse.data))
 
@@ -59,7 +59,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const register = async (registrationData) => {
     try {
-      const response = await axios.post('/api/v1/auth/register-with-role', registrationData)
+      const response = await api.post('/api/v1/auth/register-with-role', registrationData)
       return { success: true, data: response.data }
     } catch (error) {
       return { 
@@ -99,7 +99,7 @@ export const useAuthStore = defineStore('auth', () => {
   const initializeAuth = async () => {
     if (token.value) {
       try {
-        const userResponse = await axios.get('/api/v1/users/me')
+        const userResponse = await api.get('/api/v1/users/me')
         user.value = userResponse.data
         localStorage.setItem('user', JSON.stringify(userResponse.data))
       } catch (error) {
