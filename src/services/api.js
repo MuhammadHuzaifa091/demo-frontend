@@ -1,6 +1,7 @@
 import api from './axios'
 
-const API_BASE = '' // Empty since axios baseURL already includes /api/v1
+// FORCED to empty since axios baseURL is now hardcoded to /api/v1
+const API_BASE = ''
 
 // Repair Requests API
 export const repairRequestsAPI = {
