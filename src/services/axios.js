@@ -2,7 +2,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL, // comes from Vercel env in production
+    baseURL: "http://demo.publicvm.com/", // comes from Vercel env in production
+    timeout: 3000,
     withCredentials: true, // if you need cookies / auth
 });
 
