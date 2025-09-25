@@ -9,16 +9,12 @@ console.log('DEV:', import.meta.env.DEV);
 console.log('VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
 console.log('================================');
 
-// Get the base URL from environment variable
-const getBaseURL = () => {
-  // Always use the production URL as specified by the user
-  const url = import.meta.env.VITE_API_BASE_URL || 'https://demo.publicvm.com/api/v1';
-  console.log('Using baseURL:', url);
-  return url;
-};
+// FORCE the correct backend URL - no fallbacks
+const BACKEND_URL = 'https://demo.publicvm.com/api/v1';
+console.log('FORCED BACKEND URL:', BACKEND_URL);
 
 const api = axios.create({
-    baseURL: getBaseURL(),
+    baseURL: BACKEND_URL,
     timeout: 10000,
     withCredentials: true, // if you need cookies / auth
 });
