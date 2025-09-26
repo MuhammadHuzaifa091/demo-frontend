@@ -7,11 +7,31 @@ console.log('NODE_ENV:', import.meta.env.MODE);
 console.log('PROD:', import.meta.env.PROD);
 console.log('DEV:', import.meta.env.DEV);
 console.log('VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
+console.log('VITE_BACKEND_URL:', import.meta.env.VITE_BACKEND_URL);
 console.log('================================');
 
-// FORCE the correct backend URL - no fallbacks
-const BACKEND_URL = 'https://demo.publicvm.com/api/v1';
-console.log('FORCED BACKEND URL:', BACKEND_URL);
+// FORCE the correct backend URL - multiple fallbacks to ensure it works
+const getBackendURL = () => {
+  // Try the new explicit variable first
+  if (import.meta.env.VITE_BACKEND_URL) {
+    console.log('Using VITE_BACKEND_URL:', import.meta.env.VITE_BACKEND_URL);
+    return import.meta.env.VITE_BACKEND_URL;
+  }
+
+  // Fallback to the original variable
+  if (import.meta.env.VITE_API_BASE_URL) {
+    console.log('Using VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+
+  // Final hardcoded fallback
+  const HARDCODED_URL = 'https://demo.publicvm.com/api/v1';
+  console.log('Using HARDCODED fallback:', HARDCODED_URL);
+  return HARDCODED_URL;
+};
+
+const BACKEND_URL = getBackendURL();
+console.log('FINAL BACKEND URL:', BACKEND_URL);
 
 const api = axios.create({
     baseURL: BACKEND_URL,
