@@ -10,31 +10,12 @@ console.log('VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
 console.log('VITE_BACKEND_URL:', import.meta.env.VITE_BACKEND_URL);
 console.log('================================');
 
-// FORCE the correct backend URL - multiple fallbacks to ensure it works
-const getBackendURL = () => {
-  // Try the new explicit variable first
-  if (import.meta.env.VITE_BACKEND_URL) {
-    console.log('Using VITE_BACKEND_URL:', import.meta.env.VITE_BACKEND_URL);
-    return import.meta.env.VITE_BACKEND_URL;
-  }
-
-  // Fallback to the original variable
-  if (import.meta.env.VITE_API_BASE_URL) {
-    console.log('Using VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
-    return import.meta.env.VITE_API_BASE_URL;
-  }
-
-  // Final hardcoded fallback
-  const HARDCODED_URL = 'https://demo.publicvm.com/api/v1';
-  console.log('Using HARDCODED fallback:', HARDCODED_URL);
-  return HARDCODED_URL;
-};
-
-const BACKEND_URL = getBackendURL();
-console.log('FINAL BACKEND URL:', BACKEND_URL);
+// ABSOLUTE FORCE - No environment variables, only hardcoded URL
+const ABSOLUTE_BACKEND_URL = 'https://demo.publicvm.com/api/v1';
+console.log('ABSOLUTE FORCED BACKEND URL:', ABSOLUTE_BACKEND_URL);
 
 const api = axios.create({
-    baseURL: BACKEND_URL,
+    baseURL: ABSOLUTE_BACKEND_URL,
     timeout: 10000,
     withCredentials: true, // if you need cookies / auth
 });
@@ -42,6 +23,7 @@ const api = axios.create({
 // Add request interceptor for debugging
 api.interceptors.request.use((config) => {
   console.log('API Request:', config.method?.toUpperCase(), config.url, 'Base URL:', config.baseURL);
+  console.log('Full URL will be:', config.baseURL + config.url);
   return config;
 });
 
