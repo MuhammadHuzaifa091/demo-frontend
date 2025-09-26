@@ -235,7 +235,6 @@
 import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '../stores/auth'
 import { repairRequestsAPI } from '../services/api'
-import axios from 'axios'
 
 const authStore = useAuthStore()
 
@@ -299,23 +298,16 @@ const formatFileSize = (bytes) => {
 const createRequest = async () => {
   loading.value = true
   error.value = ''
-  
+
   try {
-    const formData = new FormData()
-    formData.append('title', newRequest.value.title)
-    
-    if (inputMethod.value === 'text') {
-      formData.append('description', newRequest.value.description)
-    } else if (inputMethod.value === 'voice' && selectedVoiceFile.value) {
-      formData.append('voice_file', selectedVoiceFile.value)
+    const requestData = {
+      title: newRequest.value.title,
+      description: inputMethod.value === 'text' ? newRequest.value.description : undefined
     }
-    
-    await axios.post('/api/v1/repair-requests/', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-    
+
+    // Use the configured API service instead of raw axios
+    await repairRequestsAPI.create(requestData)
+
     showCreateRequest.value = false
     newRequest.value = { title: '', description: '' }
     selectedVoiceFile.value = null
